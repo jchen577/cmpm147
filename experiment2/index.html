@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment X - Subject/Topic</title>
+	<title>Experiment 2 - Living Impressions</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -32,30 +32,33 @@
 	<main id="content">
 		<section>
 
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 2 - Living Impressions</h1>
 
 			<div class="minor-section">
 				<div id="canvas-container">
 					<!-- canvas will be added here -->
 				</div>
-                <div class="fullscreen-box">
-                    <button id="fullscreen">Fullscreen</button>
-                </div>
 			</div>
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>The goal of this project was to somewhat replicate an example landscape image that I found from a google search.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>
+					- Primitives: The trees are rendered with `triangle` primitives. The background is rendered with `rectangle` primitives.<br>
+					- Polygons: The background mountains is made with random polygons using `vertex` calls, one colored green and one colored grey.<br>
+					- Composition: Different random seed values lead to differently shaped mountains, differently positioned trees, and different sized lakes.<br></p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>I think the easiest part of the assignment was trying to generate something that looked like the reference photo. The main reason for this is because
+					it was fun to try and figure out how to do each individual part of the landscape. One example is the mountain and separating it into 2 layers. The
+					hardest part of the assignment was getting used to using p5.js again and its syntax. 
+				</p>
 			</div>
 
 		</section>
