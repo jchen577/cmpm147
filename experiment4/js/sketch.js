@@ -1,79 +1,131 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
+"use strict";
 
-// Here is how you might set up an OOP p5.js project
-// Note that p5.js looks for a file called sketch.js
+/* global XXH */
+/* exported --
+    p3_preload
+    p3_setup
+    p3_worldKeyChanged
+    p3_tileWidth
+    p3_tileHeight
+    p3_tileClicked
+    p3_drawBefore
+    p3_drawTile
+    p3_drawSelectedTile
+    p3_drawAfter
+*/
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+function p3_preload() {}
 
-// Globals
-let myInstance;
-let canvasContainer;
-var centerHorz, centerVert;
+function p3_setup() {}
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
-    }
+let worldSeed;
 
-    myMethod() {
-        // code to run when method is called
-    }
+function p3_worldKeyChanged(key) {
+  worldSeed = XXH.h32(key, 0);
+  noiseSeed(worldSeed);
+  randomSeed(worldSeed);
 }
 
-function resizeScreen() {
-  centerHorz = canvasContainer.width() / 2; // Adjusted for drawing logic
-  centerVert = canvasContainer.height() / 2; // Adjusted for drawing logic
-  console.log("Resizing...");
-  resizeCanvas(canvasContainer.width(), canvasContainer.height());
-  // redrawCanvas(); // Redraw everything based on new size
+function p3_tileWidth() {
+  return 32;
+}
+function p3_tileHeight() {
+  return 16;
 }
 
-// setup() function is called once when the program starts
-function setup() {
-  // place our canvas, making it fit our container
-  canvasContainer = $("#canvas-container");
-  let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-  canvas.parent("canvas-container");
-  // resize canvas is the page is resized
+let [tw, th] = [p3_tileWidth(), p3_tileHeight()];
 
-  // create an instance of the class
-  myInstance = new MyClass("VALUE1", "VALUE2");
+let clicks = {};
 
-  $(window).resize(function() {
-    resizeScreen();
-  });
-  resizeScreen();
+function p3_tileClicked(i, j) {
+  let key = [i, j];
+  clicks[key] = 1 + (clicks[key] | 0);
 }
 
-// draw() function is called repeatedly, it's the main animation loop
-function draw() {
-  background(220);    
-  // call a method on the instance
-  myInstance.myMethod();
+function p3_drawBefore() {}
 
-  // Set up rotation for the rectangle
-  push(); // Save the current drawing context
-  translate(centerHorz, centerVert); // Move the origin to the rectangle's center
-  rotate(frameCount / 100.0); // Rotate by frameCount to animate the rotation
-  fill(234, 31, 81);
+function p3_drawTile(i, j) {
   noStroke();
-  rect(-125, -125, 250, 250); // Draw the rectangle centered on the new origin
-  pop(); // Restore the original drawing context
 
-  // The text is not affected by the translate and rotate
-  fill(255);
-  textStyle(BOLD);
-  textSize(140);
-  text("p5*", centerHorz - 105, centerVert + 40);
+  if (XXH.h32("tile:" + [i, j], worldSeed) % 4 == 0) {
+    
+    if(XXH.h32("tile:" + [i, j], worldSeed)%100 == 4){
+    fill(0,255, 0);
+    //triangle(tw ,tw/2,tw/2,-th-20,-th-20,tw);
+    push();
+    translate(0,-20)
+    triangle(tw/2,(tw)/6,tw/6,-th-10,-th-10,(tw)/4);
+    pop();
+    fill(150,75,0);
+    rect(tw/2-20,-th-5,th/2,th);
+    }
+    fill(34, 139,39);
+  } 
+  else if(XXH.h32("tile:" + [i, j], worldSeed) % 3 == 0){
+    fill(150,75,0);
+  }
+  else {
+    if(XXH.h32("tile:" + [i, j], worldSeed)%10 == 2){
+      fill(255, 255, 100, 128);
+      triangle(0,-tw/4,-tw/2,-tw/2,-tw/2,0);
+      triangle(5,-tw/4-2,-tw/2-2,-tw/2-2,-tw/2-2,5);
+    }
+    fill(0,128,0);
+  }
+
+  push();
+
+  beginShape();
+  vertex(-tw, 0);
+  vertex(0, th);
+  vertex(tw, 0);
+  vertex(0, -th);
+  endShape(CLOSE);
+
+
+  let n = clicks[[i, j]] | 0;
+  if (n % 2 == 1) {
+    if(XXH.h32("tile:" + [i, j], worldSeed) % 4 == 0){
+      fill(255,203,164);
+      ellipse(5,-15,10,10);
+      translate(0, -10);
+      rect(0,0,10,20);
+    }
+    else if(XXH.h32("tile:" + [i, j], worldSeed) % 3 == 0){
+      fill(0,0,255);
+      beginShape();
+      vertex(-tw, 0);
+      vertex(0, th);
+      vertex(tw, 0);
+      vertex(0, -th);
+      endShape(CLOSE);
+    }
+    else{
+      fill(0, 0, 0, 32);
+      rect(0, 0, 20, 10);
+      translate(0, -10);
+      fill(255, 255, 100, 128);
+      rect(0, -10, 20, 20);
+    }
+  }
+
+  pop();
 }
 
-// mousePressed() function is called once after every time a mouse button is pressed
-function mousePressed() {
-    // code to run when mouse is pressed
+function p3_drawSelectedTile(i, j) {
+  noFill();
+  stroke(0, 255, 0, 128);
+
+  beginShape();
+  vertex(-tw, 0);
+  vertex(0, th);
+  vertex(tw, 0);
+  vertex(0, -th);
+  endShape(CLOSE);
+
+  noStroke();
+  fill(0);
+  text("tile " + [i, j], 10, 10);
 }
+
+function p3_drawAfter() {}
