@@ -4,6 +4,10 @@
 
 /* exported p4_inspirations, p4_initialize, p4_render, p4_mutate */
 
+let lastA = 255;
+let lastS = 10;
+let fade = -1;
+let fade2 = -1;
 
 function p4_inspirations() {
   return [
@@ -39,7 +43,24 @@ function p4_render(design, inspiration) {
 }
 
 function p4_mutate(design, inspiration, rate) {
-  design.alpha =(255 *(rate)+150)-(255*log(.8+rate));
-  design.size = floor( 5 * constrain(randomGaussian(rate, (rate * (1)) / 20), 0, 1))+10;
+  //console.log(arguments)
+  //design.alpha =(255 *(rate)+150)-(255*log(.8+rate));
+  design.alpha = lastA+ (3*rate*fade);
+  if(design.alpha < 50){
+    fade = 1;
+  }
+  else if(design.alpha > 255){
+    fade = -1;
+  }
+  lastA = design.alpha;
+
+  design.size = lastS + (.2 *rate*fade2) ;
+  lastS = design.size
+  if(design.size < 5){
+    fade2 = 1;
+  }
+  else if(design.size > 20){
+    fade2 = -1;
+  }
   design.drawSize=(5*rate)+15;
 }
