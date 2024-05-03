@@ -2,33 +2,44 @@
 // Author: Your Name
 // Date:
 
-// NOTE: This is how we might start a basic JavaaScript OOP project
+/* exported p4_inspirations, p4_initialize, p4_render, p4_mutate */
 
-// Constants - User-servicable parts
-// In a longer project I like to put these in a separate file
 
-// define a class
-class MyProjectClass {
-  // constructor function
-  constructor(param1, param2) {
-    // set properties using 'this' keyword
-    this.property1 = param1;
-    this.property2 = param2;
-  }
-  
-  // define a method
-  myMethod() {
-    // code to run when method is called
+function p4_inspirations() {
+  return [
+    {name: "creeper", assetURL: './assets/creeper.png'},
+    {name: "donkey", assetURL: "./assets/donkey.jpg"},
+    {name: "sunset", assetURL: "./assets/sunset.jpg"},
+    {name: "choncc", assetURL: "./assets/choncc.jpg"},
+  ];
+}
+
+function p4_initialize(inspiration) {
+  resizeCanvas(inspiration.image.width/2, inspiration.image.height/2 );
+  return {alpha:255, size: 10 ,drawSize: 20};
+}
+
+function p4_render(design, inspiration) {
+  inspiration.image.loadPixels();
+  noStroke();
+  background(255,255,255);
+  for(let i = 0; i <inspiration.image.width;i+=design.size){
+    for(let j = 0; j < inspiration.image.height;j+=design.size){
+      let c = inspiration.image.get(i*2,j*2);
+      c[3] = design.alpha;
+      fill(c);
+      if(inspiration.name == 'donkey' || inspiration.name == 'choncc'){
+        rect(i,j,design.drawSize,design.drawSize);  
+      }
+      else{
+        ellipse(i,j,design.drawSize);  
+      }
+    }
   }
 }
 
-function main() {
-  // create an instance of the class
-  let myInstance = new MyProjectClass("value1", "value2");
-
-  // call a method on the instance
-  myInstance.myMethod();
+function p4_mutate(design, inspiration, rate) {
+  design.alpha =(255 *(rate)+150)-(255*log(.8+rate));
+  design.size = floor( 5 * constrain(randomGaussian(rate, (rate * (1)) / 20), 0, 1))+10;
+  design.drawSize=(5*rate)+15;
 }
-
-// let's get this party started - uncomment me
-//main();
