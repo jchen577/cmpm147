@@ -54,7 +54,7 @@ function p3_drawTile(i, j) {
     //triangle(tw ,tw/2,tw/2,-th-20,-th-20,tw);
     push();
     translate(0,-20)
-    triangle(tw/2,(tw)/6,tw/6,-th-10,-th-10,(tw)/4);
+    triangle(tw/2,(tw)/6,tw/6*noise(millis()/1000+i/2,j/2,millis()/1000),-th-10,-th-10,(tw)/4);
     pop();
     fill(150,75,0);
     rect(tw/2-20,-th-5,th/2,th);
@@ -70,7 +70,7 @@ function p3_drawTile(i, j) {
       triangle(0,-tw/4,-tw/2,-tw/2,-tw/2,0);
       triangle(5,-tw/4-2,-tw/2-2,-tw/2-2,-tw/2-2,5);
     }
-    fill(0,128,0);
+    fill(0,128*noise(millis()/1000+i/20,j/20,millis()/1000),0);
   }
 
   push();
